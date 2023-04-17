@@ -85,7 +85,11 @@ def inch_swap(private_key):
             time.sleep(random.randint(delay[0], delay[1]))
         _1inchurl = f'https://api.1inch.io/v5.0/{Network.chain_id}/swap?fromTokenAddress={Data.token_address}&toTokenAddress={Data.nativeEth_address}&amount={amount}&fromAddress={wallet_address}&slippage={slippage}&destReceiver={wallet_address}'
         json_data = api_call(_1inchurl)
-        received_eth = web3.fromWei(int(json_data["toTokenAmount"]), 'ether')
+        try:
+            received_eth = web3.fromWei(int(json_data["toTokenAmount"]), 'ether')
+            received_eth_str = round(received_eth, 5)
+        except KeyError:
+            received_eth_str = "unknown"
         tx = json_data['tx']
         tx['nonce'] = nonce
         tx['to'] = Web3.toChecksumAddress(tx['to'])
@@ -93,8 +97,7 @@ def inch_swap(private_key):
         tx['value'] = int(tx['value'])
         signed_tx = web3.eth.account.signTransaction(tx, private_key)
         tx_hash = web3.eth.sendRawTransaction(signed_tx.rawTransaction)
-
-        print(f'\n>>> swap all $AIDOGE to {round(received_eth, 5)} $ETH | https://arbiscan.io/tx/{web3.toHex(tx_hash)}')
+        print(f'\n>>> swap all $AIDOGE to {received_eth_str} $ETH | https://arbiscan.io/tx/{web3.toHex(tx_hash)}')
         print(f'    {wallet_address}')
     except Exception as error:
         print(f'\n>>> Error swap | {error}')
