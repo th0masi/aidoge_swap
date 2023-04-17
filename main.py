@@ -72,7 +72,7 @@ def inch_swap(private_key):
     nonce = web3.eth.getTransactionCount(wallet_address)
     try:
         amount = balanceOf(wallet_address)
-        if amount == 0:  # добавьте проверку на ноль
+        if amount == 0:
             print(f'\n>>> Zero balance of $AIDOGE token.')
             print(f'    {wallet_address}')
             return
