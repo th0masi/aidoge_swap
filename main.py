@@ -3,8 +3,11 @@ import time
 import requests
 import random
 
+#---option---#
 delay = [20, 50]
 slippage = 1
+#---option---#
+
 
 class Network:
     rpc_chain = "https://arb1.arbitrum.io/rpc"
